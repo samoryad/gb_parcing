@@ -5,7 +5,7 @@ username = 'samoryad'
 url = f'https://api.github.com/users/{username}/repos'
 response = requests.get(url)
 json_data = response.json()
-print(f'Получен результат {json_data}')
+print(f'Ответ: {json_data}')
 
 repo = []
 for item in json_data:
