@@ -1,0 +1,31 @@
+# Created by .ignore support plugin (hsz.mobi)
+### VirtualEnv template
+# Virtualenv
+# http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
+.Python
+[Bb]in
+[Ii]nclude
+[Ll]ib
+[Ll]ib64
+[Ll]ocal
+[Ss]cripts
+pyvenv.cfg
+pip-selfcheck.json
+.venv
+.env
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.idea
+#/media/
+vk.json
+/tmp/
+.tmp
+__pycache__
+**/__pycache__
+__pycache__/
+*.pyc
+/.lesson_01_samples.py
+lesson_01_samples.py
