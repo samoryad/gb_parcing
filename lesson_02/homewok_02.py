@@ -15,9 +15,19 @@ if response.ok:
 
     for vacancy in vacancies:
         vacancy_data = {}
-        vacancy_text = vacancy.find('a').getText()
-        vacancy_list.append(vacancy_text)
+        vacancy_name = vacancy.find('a').getText()
+        vacancy_link = vacancy.find('a')['href']
+        vacancy_salary = vacancy.find('span', {'data-qa': 'vacancy-serp__vacancy-compensation'})
+        if vacancy_salary is not None:
+            vacancy_salary = vacancy_salary.text
+        else:
+            vacancy_salary = "None"
 
+        vacancy_data['name'] = vacancy_name
+        vacancy_data['link'] = vacancy_link
+        vacancy_data['url'] = url
+        vacancy_data['salary'] = vacancy_salary
+        vacancy_list.append(vacancy_data)
 
 pprint(vacancy_list)
-# print(len(vacancy_list))
+print(len(vacancy_list))
