@@ -59,7 +59,7 @@ while True:
 
             vacancy_data['name'] = vacancy_name
             vacancy_data['link'] = vacancy_link
-            vacancy_data['url'] = base_url
+            vacancy_data['url'] = url
             vacancy_data['total_salary'] = current_vacancy_salary
             vacancy_data['min_salary'] = min_vacancy_salary
             vacancy_data['max_salary'] = max_vacancy_salary
