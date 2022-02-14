@@ -2,6 +2,7 @@ import json
 import requests
 from bs4 import BeautifulSoup
 from pprint import pprint
+import pandas as pd
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36'}
@@ -79,3 +80,9 @@ with open('hh_vacancies.json', 'w') as f:
 
 # pprint(vacancy_list)
 # print(len(vacancy_list))
+
+
+vacancies_dataframe = pd.DataFrame(vacancy_list)
+# print(vacancies_dataframe)
+with pd.option_context('display.max_rows', 10, 'display.max_columns', None):
+    print(vacancies_dataframe)
