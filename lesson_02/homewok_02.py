@@ -9,7 +9,9 @@ headers = {
 base_url = 'https://hh.ru'
 url = 'https://hh.ru/vacancies/razrabotchik'
 
+
 vacancy_list = []
+
 
 while True:
     response = requests.get(url, headers=headers)
@@ -26,6 +28,7 @@ while True:
             vacancy_name = vacancy_name.replace(u"\u2062", u"")
             vacancy_name = vacancy_name.replace(u"\u200e", u"")
             vacancy_name = vacancy_name.replace(u"\u200b", u"")
+            vacancy_name = vacancy_name.replace(u"\u202f", u"")
 
             # Ссылка на вакансию
             vacancy_link = vacancy.find('a')
@@ -84,5 +87,5 @@ with open('hh_vacancies.json', 'w') as f:
 
 vacancies_dataframe = pd.DataFrame(vacancy_list)
 # print(vacancies_dataframe)
-with pd.option_context('display.max_rows', 10, 'display.max_columns', None):
-    print(vacancies_dataframe)
+# with pd.option_context('display.max_rows', 10, 'display.max_columns', None):
+#     print(vacancies_dataframe)
