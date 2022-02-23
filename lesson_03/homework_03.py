@@ -5,19 +5,17 @@ from bs4 import BeautifulSoup
 from pymongo.errors import DuplicateKeyError
 
 
-def insert_to_db(collection, vacancy_data, vacancy_id):
+def insert_to_db(collection, vacancy_data):
     """
     функция, проверяющая наличие в коллекции по _id и
     в случае отсутствия - добавляющая новую запись
     """
     global counter
-    id_list = list(collection.find({'_id': {'$in': [vacancy_id]}}))
-    if len(id_list) == 0:
-        try:
-            collection.insert_one(vacancy_data)
-            counter += 1
-        except DuplicateKeyError:
-            print('Duplicate key error collection')
+    try:
+        collection.insert_one(vacancy_data)
+        counter += 1
+    except DuplicateKeyError:
+        print('Duplicate key error collection')
 
 
 def hh_scraping(vacancy_to_search, collection):
@@ -111,7 +109,7 @@ def hh_scraping(vacancy_to_search, collection):
                 vacancy_data['max_salary'] = max_vacancy_salary
                 vacancy_data['currency'] = currency
 
-                insert_to_db(collection, vacancy_data, vacancy_id)
+                insert_to_db(collection, vacancy_data)
 
             if next_page:
                 url = base_url + next_page.get('href')
