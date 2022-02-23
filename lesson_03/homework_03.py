@@ -1,4 +1,7 @@
+import datetime
 from pprint import pprint
+
+from pycbrf.toolbox import ExchangeRates
 import pymongo
 import requests
 from bs4 import BeautifulSoup
@@ -119,21 +122,36 @@ def hh_scraping(vacancy_to_search, collection):
             break
 
 
-def find_gt_salary(collection):
-    """Функция поиска зарплат, больших 300000 в рублёвом эквиваленте"""
+def find_gte_salary(collection):
+    """Функция поиска зарплат, больших заданной в рублёвом эквиваленте"""
+    while True:
+        try:
+            salary_for_find = int(
+                input('Введите желаемую зарплату для поиска в рублях: '))
+            if salary_for_find < 0:
+                print('отрицательное число переведено в положительное')
+                salary_for_find = (-salary_for_find)
+            break
+        except Exception:
+            print('Некорректный ввод - введите целое положительное число')
+
+    # получаем курсы валют ЦБ
+    rates = ExchangeRates(datetime.datetime.now())
+    usd_rate = int(rates['USD'].value)
+    eur_rate = int(rates['EUR'].value)
+    kzt_rate = int(rates['KZT'].value)
     return collection.find({'$or': [{'currency': 'руб.',
-                                     '$or': [{'min_salary': {'$gt': 300000}},
-                                             {'max_salary': {'$gt': 300000}}]},
+                                     '$or': [{'min_salary': {'$gte': salary_for_find}},
+                                             {'max_salary': {'$gte': salary_for_find}}]},
                                     {'currency': 'EUR.',
-                                     '$or': [{'min_salary': {'$gt': 3500}},
-                                             {'max_salary': {'$gt': 3500}}]},
+                                     '$or': [{'min_salary': {'$gte': salary_for_find / eur_rate}},
+                                             {'max_salary': {'$gte': salary_for_find / eur_rate}}]},
                                     {'currency': 'USD.',
-                                     '$or': [{'min_salary': {'$gt': 4000}},
-                                             {'max_salary': {'$gt': 4000}}]},
+                                     '$or': [{'min_salary': {'$gte': salary_for_find / usd_rate}},
+                                             {'max_salary': {'$gte': salary_for_find / usd_rate}}]},
                                     {'currency': 'KZT.',
-                                     '$or': [{'min_salary': {'$gt': 1695000}},
-                                             {'max_salary': {'$gt': 1695000}}]}
-                                    ]})
+                                     '$or': [{'min_salary': {'$gte': salary_for_find / kzt_rate}},
+                                             {'max_salary': {'$gte': salary_for_find / kzt_rate}}]}]})
 
 
 counter = 0
@@ -148,7 +166,7 @@ chosen_vacancy = input('Введите вакансию: ')
 hh_scraping(chosen_vacancy, hh_vacancies)
 print(f'Добавилось новых вакансий - {counter}')
 
-for vacancy in find_gt_salary(hh_vacancies):
+for vacancy in find_gte_salary(hh_vacancies):
     pprint(vacancy)
 
 # curr = hh_vacancies.find({
