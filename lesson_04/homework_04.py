@@ -48,7 +48,6 @@ def collect_href_of_news():
 def collect_info_from_href(href_list, collection):
     """функция вычленения информации о новости из списка ссылок"""
     global headers
-    # news_list = []
     for link in href_list:
         mailru_news = {}
         response = requests.get(link, headers=headers)
@@ -69,12 +68,8 @@ def collect_info_from_href(href_list, collection):
 
         insert_to_db(collection, mailru_news)
 
-        # news_list.append(mailru_news)
-
     return
 
-
-# pprint(collect_info_from_href(collect_href_of_news()))
 
 client = pymongo.MongoClient('localhost', 27017)
 db = client['mailru_news']  # база данных новостей
