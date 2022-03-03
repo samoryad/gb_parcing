@@ -1,6 +1,5 @@
 #!/usr/bin/venv python
 # -*- coding: utf-8 -*-
-import time
 from pprint import pprint
 import pymongo
 from pymongo.errors import DuplicateKeyError
@@ -24,51 +23,22 @@ def insert_to_db(collection, product_list):
         print('Duplicate key error collection')
 
 
-def page_down_after_categories():
+def page_down_and_click():
     """
     функция, которая пролистывает страницу до
-    нужной кнопки после нахождения категорий
+    нужной кнопки В тренде и нажимает её
     """
-    wait = WebDriverWait(driver, 10)
-
-    time.sleep(2)
-    news_elem = wait.until(
-        EC.presence_of_element_located(
-            (By.XPATH, "//a[contains(@class, 'story-item')]")))
-    news_elem.send_keys(Keys.PAGE_DOWN)
-
-    time.sleep(2)
-    hit_elem = wait.until(
-        EC.presence_of_element_located(
-            (By.XPATH, "//a[contains(@class, 'img-with-badge')]")))
-    hit_elem.send_keys(Keys.PAGE_DOWN)
-
-    time.sleep(2)
-    pop_category_elem = wait.until(
-        EC.presence_of_element_located(
-            (By.XPATH, "//a[contains(@class,'popular-categories__item')]")))
-    pop_category_elem.send_keys(Keys.ARROW_DOWN)
-    pop_category_elem.send_keys(Keys.ARROW_DOWN)
-    # pop_category_elem.send_keys(Keys.ARROW_DOWN)
-
-
-def click_on_trend():
-    """функция нажатия на кнопку с трендами после её активизации"""
-    wait = WebDriverWait(driver, 10)
-    # комментарии пока не удалял
-    # wait.until(
-    #     EC.presence_of_element_located(
-    #         (By.XPATH, "//a[contains(@class, 'mv-banner--link')]")))
-
-    button = wait.until(
-        EC.presence_of_element_located(
-            (By.XPATH, "//span[contains(text(), 'В тренде')]")))
-    button.click()
-
-    # button = wait.until(
-    #     EC.element_to_be_clickable(
-    #         (By.XPATH, "//span[contains(text(), 'В тренде')]")))
-    # button.click()
+    wait = WebDriverWait(driver, 5)
+    while True:
+        html = driver.find_element(By.TAG_NAME, 'html')
+        try:
+            button = wait.until(
+                EC.presence_of_element_located(
+                    (By.XPATH, "//span[contains(text(), 'В тренде')]")))
+            button.click()
+            break
+        except Exception:
+            html.send_keys(Keys.PAGE_DOWN)
 
 
 # создаём экземплар драйвера chrome
@@ -79,8 +49,7 @@ chrome_options.add_argument("start-maximized")
 driver = webdriver.Chrome(service=s, options=chrome_options)
 driver.get('https://www.mvideo.ru/')
 
-page_down_after_categories()
-click_on_trend()
+page_down_and_click()
 
 # выбираем сначала главный родительский блок
 trends_elem = driver.find_element(
